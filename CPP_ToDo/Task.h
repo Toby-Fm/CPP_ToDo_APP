@@ -8,4 +8,5 @@ class Task
 	bool done;
 };
 
-void saveTasksToFile(const std::vector<Task> tasks, std::string filename);
+void saveTasksToFile(const std::vector<Task>& tasks, const std::string& filename);
+std::vector<Task> loadTasksFromFile(const std::string& filename);
