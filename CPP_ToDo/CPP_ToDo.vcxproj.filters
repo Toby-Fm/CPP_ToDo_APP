@@ -21,12 +21,18 @@
     <ClInclude Include="Task.h">
       <Filter>Headerdateien</Filter>
     </ClInclude>
+    <ClInclude Include="App.h">
+      <Filter>Headerdateien</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
       <Filter>Quelldateien</Filter>
     </ClCompile>
     <ClCompile Include="Task.cpp">
+      <Filter>Quelldateien</Filter>
+    </ClCompile>
+    <ClCompile Include="App.cpp">
       <Filter>Quelldateien</Filter>
     </ClCompile>
   </ItemGroup>
