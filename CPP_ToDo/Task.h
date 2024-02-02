@@ -2,7 +2,7 @@
 #include <string>
 #include <vector>
 
-class Task
+struct Task
 {
 	std::string description;
 	bool done;
