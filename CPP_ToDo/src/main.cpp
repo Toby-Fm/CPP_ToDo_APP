@@ -1,7 +1,7 @@
-#include "main.h"
+#include "header/main.h"
+#include "header/Task.h"
 #include <vector>
 #include <string>
-#include "Task.h"
 
 MainFrame::MainFrame(const wxString& title) : wxFrame(nullptr, wxID_ANY, title)
 {
@@ -17,27 +17,44 @@ void MainFrame::CreateControls()
 
 	panel = new wxPanel(this);
 	panel->SetFont(mainFont);
+	panel->SetBackgroundColour(wxColour(115, 112, 112)); //Hintergrundfarbe Anwendung
 
 	headlineText = new wxStaticText(panel, wxID_ANY, "To-Do List", wxPoint(0, 22), wxSize(800, -1), wxALIGN_CENTER_HORIZONTAL);
 	headlineText->SetFont(healineFont);
+	headlineText->SetForegroundColour(wxColour(10, 10, 10)); //Textfarbe Überschrift
 
-	inputField = new wxTextCtrl(panel, wxID_ANY, "", wxPoint(100, 80), wxSize(495, 35), wxTE_PROCESS_ENTER);
-	addButton = new wxButton(panel, wxID_ANY, "Add", wxPoint(600, 80), wxSize(100, 35));
-	checklistBox = new wxCheckListBox(panel, wxID_ANY, wxPoint(100, 120), wxSize(600, 400));
-	clearButton = new wxButton(panel, wxID_ANY, "Clear", wxPoint(100, 525), wxSize(100, 35));
+	inputField = new wxTextCtrl(panel, wxID_ANY, "", wxDefaultPosition, wxDefaultSize, wxTE_PROCESS_ENTER);
+	inputField->SetBackgroundColour(wxColour(51, 51, 51)); //Hintergrundfarbe Eingabefeld
 
-	// Layout mit Sizern
+	addButton = new wxButton(panel, wxID_ANY, "Add");
+	addButton->SetBackgroundColour(wxColour(51, 51, 51)); //Hintergrundfarbe Button
+	addButton->SetForegroundColour(wxColour(255, 255, 255)); //Textfarbe Button
+
+	checklistBox = new wxCheckListBox(panel, wxID_ANY);
+	checklistBox->SetBackgroundColour(wxColour(51, 51, 51)); //Hintergrundfarbe Checkliste
+	checklistBox->SetForegroundColour(wxColour(255, 255, 255)); //Textfarbe Checkliste
+
+	clearButton = new wxButton(panel, wxID_ANY, "Clear");
+	clearButton->SetBackgroundColour(wxColour(51, 51, 51)); //Hintergrundfarbe Button
+	clearButton->SetForegroundColour(wxColour(255, 255, 255)); //Textfarbe Button
+
+	changeColorButton = new wxButton(panel, wxID_ANY, "Change Color");
+	changeColorButton->SetBackgroundColour(wxColour(51, 51, 51)); //Hintergrundfarbe Button
+	changeColorButton->SetForegroundColour(wxColour(255, 255, 255)); //Textfarbe Button
+
+	//Layout mit Sizern
 	wxBoxSizer* vSizer = new wxBoxSizer(wxVERTICAL);
 	wxBoxSizer* hSizer = new wxBoxSizer(wxHORIZONTAL);
-
-	hSizer->Add(inputField, 5, wxEXPAND | wxALL, 5); // 5 Teile der verfügbaren Größe
-	hSizer->Add(addButton, 1, wxEXPAND | wxALL, 5); // 1 Teil der verfügbaren Größe
-
+	
+	hSizer->Add(inputField, 5, wxEXPAND | wxLEFT | wxRIGHT, 5); // 5 Teile der verfügbaren Größe
+	hSizer->Add(addButton, 1, wxEXPAND | wxRIGHT | wxRIGHT, 5); // 1 Teil der verfügbaren Größe
+	
 	vSizer->Add(headlineText, 0, wxALIGN_CENTER | wxTOP | wxBOTTOM, 10);
-	vSizer->Add(hSizer, 0, wxEXPAND);
+	vSizer->Add(hSizer, 0, wxEXPAND | wxLEFT | wxRIGHT | wxBOTTOM, 10);
 	vSizer->Add(checklistBox, 1, wxEXPAND | wxLEFT | wxRIGHT | wxBOTTOM, 10); // 1 Teil der verfügbaren Größe, expandiert
 	vSizer->Add(clearButton, 0, wxALIGN_LEFT | wxLEFT | wxBOTTOM, 10);
-
+	vSizer->Add(changeColorButton, 0, wxALIGN_LEFT | wxLEFT | wxBOTTOM, 10);
+	
 	panel->SetSizer(vSizer);
 	panel->Layout();
 }
@@ -76,21 +93,21 @@ void MainFrame::OnListKeyDown(wxKeyEvent& evt)
 {
 	switch (evt.GetKeyCode())
 	{
-		case WXK_DELETE: 
-		{
-			DeleteSelectedTasks();
-			break;
-		}
-		case WXK_UP: 
-		{
-			MoveSelectedTasks(-1);
-			break;
-		}
-		case WXK_DOWN: 
-		{
-			MoveSelectedTasks(1);
-			break;
-		}
+	case WXK_DELETE:
+	{
+		DeleteSelectedTasks();
+		break;
+	}
+	case WXK_UP:
+	{
+		MoveSelectedTasks(-1);
+		break;
+	}
+	case WXK_DOWN:
+	{
+		MoveSelectedTasks(1);
+		break;
+	}
 	}
 }
 
@@ -124,6 +141,11 @@ void MainFrame::OnWindowClosed(wxCloseEvent& evt)
 
 	SaveTasksToFile(tasks, "tasks.txt");
 	evt.Skip();
+}
+
+void MainFrame::OnChangeColorButtonClicked(wxCommandEvent& evt)
+{
+
 }
 
 void MainFrame::AddTaskFromInput()
@@ -166,8 +188,8 @@ void MainFrame::MoveSelectedTasks(int offset)
 
 void MainFrame::SwapTasks(int i, int j)
 {
-	Task taskI{ checklistBox->GetString(i).ToStdString(), checklistBox->IsChecked(i)};
-	Task taskJ{ checklistBox->GetString(j).ToStdString(), checklistBox->IsChecked(j)};
+	Task taskI{ checklistBox->GetString(i).ToStdString(), checklistBox->IsChecked(i) };
+	Task taskJ{ checklistBox->GetString(j).ToStdString(), checklistBox->IsChecked(j) };
 
 	checklistBox->SetString(i, taskJ.description);
 	checklistBox->Check(i, taskJ.done);

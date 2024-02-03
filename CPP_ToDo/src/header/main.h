@@ -16,6 +16,8 @@ private:
 	void OnClearButtonClicked(wxCommandEvent& evt);
 	void OnWindowClosed(wxCloseEvent& evt);
 	
+	void OnChangeColorButtonClicked(wxCommandEvent& evt);
+
 	void AddTaskFromInput();
 	void DeleteSelectedTasks();
 	void MoveSelectedTasks(int offset);
@@ -27,4 +29,5 @@ private:
 	wxButton* addButton;
 	wxCheckListBox* checklistBox;
 	wxButton* clearButton;
+	wxButton* changeColorButton;
 };

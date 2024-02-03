@@ -15,24 +15,24 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="main.h">
+    <ClInclude Include="src\header\main.h">
       <Filter>Headerdateien</Filter>
     </ClInclude>
-    <ClInclude Include="Task.h">
+    <ClInclude Include="src\header\Task.h">
       <Filter>Headerdateien</Filter>
     </ClInclude>
-    <ClInclude Include="App.h">
+    <ClInclude Include="src\header\App.h">
       <Filter>Headerdateien</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="main.cpp">
+    <ClCompile Include="src\main.cpp">
       <Filter>Quelldateien</Filter>
     </ClCompile>
-    <ClCompile Include="Task.cpp">
+    <ClCompile Include="src\Task.cpp">
       <Filter>Quelldateien</Filter>
     </ClCompile>
-    <ClCompile Include="App.cpp">
+    <ClCompile Include="src\App.cpp">
       <Filter>Quelldateien</Filter>
     </ClCompile>
   </ItemGroup>
