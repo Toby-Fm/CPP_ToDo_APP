@@ -25,6 +25,21 @@ void MainFrame::CreateControls()
 	addButton = new wxButton(panel, wxID_ANY, "Add", wxPoint(600, 80), wxSize(100, 35));
 	checklistBox = new wxCheckListBox(panel, wxID_ANY, wxPoint(100, 120), wxSize(600, 400));
 	clearButton = new wxButton(panel, wxID_ANY, "Clear", wxPoint(100, 525), wxSize(100, 35));
+
+	// Layout mit Sizern
+	wxBoxSizer* vSizer = new wxBoxSizer(wxVERTICAL);
+	wxBoxSizer* hSizer = new wxBoxSizer(wxHORIZONTAL);
+
+	hSizer->Add(inputField, 5, wxEXPAND | wxALL, 5); // 5 Teile der verfügbaren Größe
+	hSizer->Add(addButton, 1, wxEXPAND | wxALL, 5); // 1 Teil der verfügbaren Größe
+
+	vSizer->Add(headlineText, 0, wxALIGN_CENTER | wxTOP | wxBOTTOM, 10);
+	vSizer->Add(hSizer, 0, wxEXPAND);
+	vSizer->Add(checklistBox, 1, wxEXPAND | wxLEFT | wxRIGHT | wxBOTTOM, 10); // 1 Teil der verfügbaren Größe, expandiert
+	vSizer->Add(clearButton, 0, wxALIGN_LEFT | wxLEFT | wxBOTTOM, 10);
+
+	panel->SetSizer(vSizer);
+	panel->Layout();
 }
 
 void MainFrame::BindEventHandlers()
