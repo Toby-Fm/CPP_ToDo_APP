@@ -7,6 +7,7 @@ MainFrame::MainFrame(const wxString& title) : wxFrame(nullptr, wxID_ANY, title)
 {
 	CreateControls();
 	BindEventHandlers();
+	AddSavedTasks();
 }
 
 void MainFrame::CreateControls()
@@ -32,6 +33,18 @@ void MainFrame::BindEventHandlers()
 	inputField->Bind(wxEVT_TEXT_ENTER, &MainFrame::OnInputEnter, this);
 	checklistBox->Bind(wxEVT_KEY_DOWN, &MainFrame::OnListKeyDown, this);
 	clearButton->Bind(wxEVT_BUTTON, &MainFrame::OnClearButtonClicked, this);
+	this->Bind(wxEVT_CLOSE_WINDOW, &MainFrame::OnWindowClosed, this);
+}
+
+void MainFrame::AddSavedTasks()
+{
+	std::vector<Task> tasks = LoadTasksFromFile("tasks.txt");
+	for (const Task& task : tasks)
+	{
+		int index = checklistBox->GetCount();
+		checklistBox->Insert(task.description, index);
+		checklistBox->Check(index, task.done);
+	}
 }
 
 void MainFrame::OnAddButtonClicked(wxCommandEvent& event)
@@ -74,6 +87,28 @@ void MainFrame::OnClearButtonClicked(wxCommandEvent& evt)
 	}
 
 	wxMessageDialog dialog(this, "Möchtest du wirklich alle Tasks löschen?", "Löschen", wxYES_NO | wxCANCEL | wxICON_QUESTION);
+	int result = dialog.ShowModal();
+
+	if (result == wxID_YES)
+	{
+		checklistBox->Clear();
+	}
+
+}
+
+void MainFrame::OnWindowClosed(wxCloseEvent& evt)
+{
+	std::vector<Task> tasks;
+	for (int i = 0; i < checklistBox->GetCount(); i++)
+	{
+		Task task;
+		task.description = checklistBox->GetString(i);
+		task.done = checklistBox->IsChecked(i);
+		tasks.push_back(task);
+	}
+
+	SaveTasksToFile(tasks, "tasks.txt");
+	evt.Skip();
 }
 
 void MainFrame::AddTaskFromInput()
