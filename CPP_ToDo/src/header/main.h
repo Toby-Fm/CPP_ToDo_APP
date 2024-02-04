@@ -6,6 +6,8 @@ class MainFrame : public wxFrame
 public:
 	MainFrame(const wxString& title);
 private:
+	bool colorMode;
+
 	void CreateControls();
 	void BindEventHandlers();
 	void AddSavedTasks();
@@ -29,5 +31,6 @@ private:
 	wxButton* addButton;
 	wxCheckListBox* checklistBox;
 	wxButton* clearButton;
+	
 	wxButton* changeColorButton;
 };

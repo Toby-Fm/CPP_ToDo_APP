@@ -3,7 +3,7 @@
 #include <vector>
 #include <string>
 
-MainFrame::MainFrame(const wxString& title) : wxFrame(nullptr, wxID_ANY, title)
+MainFrame::MainFrame(const wxString& title) : wxFrame(nullptr, wxID_ANY, title), colorMode(false)
 {
 	CreateControls();
 	BindEventHandlers();
@@ -17,30 +17,14 @@ void MainFrame::CreateControls()
 
 	panel = new wxPanel(this);
 	panel->SetFont(mainFont);
-	panel->SetBackgroundColour(wxColour(115, 112, 112)); //Hintergrundfarbe Anwendung
 
+	//Objects
 	headlineText = new wxStaticText(panel, wxID_ANY, "To-Do List", wxPoint(0, 22), wxSize(800, -1), wxALIGN_CENTER_HORIZONTAL);
-	headlineText->SetFont(healineFont);
-	headlineText->SetForegroundColour(wxColour(10, 10, 10)); //Textfarbe Überschrift
-
 	inputField = new wxTextCtrl(panel, wxID_ANY, "", wxDefaultPosition, wxDefaultSize, wxTE_PROCESS_ENTER);
-	inputField->SetBackgroundColour(wxColour(51, 51, 51)); //Hintergrundfarbe Eingabefeld
-
 	addButton = new wxButton(panel, wxID_ANY, "Add");
-	addButton->SetBackgroundColour(wxColour(51, 51, 51)); //Hintergrundfarbe Button
-	addButton->SetForegroundColour(wxColour(255, 255, 255)); //Textfarbe Button
-
 	checklistBox = new wxCheckListBox(panel, wxID_ANY);
-	checklistBox->SetBackgroundColour(wxColour(51, 51, 51)); //Hintergrundfarbe Checkliste
-	checklistBox->SetForegroundColour(wxColour(255, 255, 255)); //Textfarbe Checkliste
-
 	clearButton = new wxButton(panel, wxID_ANY, "Clear");
-	clearButton->SetBackgroundColour(wxColour(51, 51, 51)); //Hintergrundfarbe Button
-	clearButton->SetForegroundColour(wxColour(255, 255, 255)); //Textfarbe Button
-
 	changeColorButton = new wxButton(panel, wxID_ANY, "Change Color");
-	changeColorButton->SetBackgroundColour(wxColour(51, 51, 51)); //Hintergrundfarbe Button
-	changeColorButton->SetForegroundColour(wxColour(255, 255, 255)); //Textfarbe Button
 
 	//Layout mit Sizern
 	wxBoxSizer* vSizer = new wxBoxSizer(wxVERTICAL);
@@ -66,6 +50,7 @@ void MainFrame::BindEventHandlers()
 	checklistBox->Bind(wxEVT_KEY_DOWN, &MainFrame::OnListKeyDown, this);
 	clearButton->Bind(wxEVT_BUTTON, &MainFrame::OnClearButtonClicked, this);
 	this->Bind(wxEVT_CLOSE_WINDOW, &MainFrame::OnWindowClosed, this);
+	changeColorButton->Bind(wxEVT_BUTTON, &MainFrame::OnChangeColorButtonClicked, this);
 }
 
 void MainFrame::AddSavedTasks()
@@ -145,8 +130,39 @@ void MainFrame::OnWindowClosed(wxCloseEvent& evt)
 
 void MainFrame::OnChangeColorButtonClicked(wxCommandEvent& evt)
 {
-
+	if (colorMode) { //Heller modus
+		// Farben für den ersten Modus
+		panel->SetBackgroundColour(wxColour(255, 255, 255));
+		addButton->SetBackgroundColour(wxColour(255, 255, 255));
+		addButton->SetForegroundColour(wxColour(0, 0, 0));
+		inputField->SetBackgroundColour(wxColour(255, 255, 255));
+		inputField->SetForegroundColour(wxColour(0, 0, 0));
+		checklistBox->SetBackgroundColour(wxColour(255, 255, 255));
+		checklistBox->SetForegroundColour(wxColour(0, 0, 0));
+		clearButton->SetBackgroundColour(wxColour(255, 255, 255));
+		clearButton->SetForegroundColour(wxColour(0, 0, 0));
+		changeColorButton->SetBackgroundColour(wxColour(255, 255, 255));
+		changeColorButton->SetForegroundColour(wxColour(0, 0, 0));
+	}
+	else { //Dunkler modus
+		// Farben für den zweiten Modus
+		panel->SetBackgroundColour(wxColour(115, 112, 112));
+		addButton->SetBackgroundColour(wxColour(51, 51, 51));
+		addButton->SetForegroundColour(wxColour(255, 255, 255));
+		inputField->SetBackgroundColour(wxColour(51, 51, 51));
+		inputField->SetForegroundColour(wxColour(255, 255, 255));
+		checklistBox->SetBackgroundColour(wxColour(51, 51, 51));
+		checklistBox->SetForegroundColour(wxColour(51, 51, 51));
+		clearButton->SetBackgroundColour(wxColour(51, 51, 51));
+		clearButton->SetForegroundColour(wxColour(255, 255, 255));
+		changeColorButton->SetBackgroundColour(wxColour(51, 51, 51));
+		changeColorButton->SetForegroundColour(wxColour(255, 255, 255));
+	}
+	colorMode = !colorMode; // Wechselt den Modus
+	
+	panel->Refresh(); // Aktualisieren das Panel, um die neuen Farben anzuzeigen
 }
+
 
 void MainFrame::AddTaskFromInput()
 {
