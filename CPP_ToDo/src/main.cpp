@@ -55,6 +55,7 @@ void MainFrame::BindEventHandlers()
 	addButton->Bind(wxEVT_BUTTON, &MainFrame::OnAddButtonClicked, this);
 	inputField->Bind(wxEVT_TEXT_ENTER, &MainFrame::OnInputEnter, this);
 	checklistBox->Bind(wxEVT_KEY_DOWN, &MainFrame::OnListKeyDown, this);
+	checklistBox->Bind(wxEVT_CHECKLISTBOX, &MainFrame::OnCheckListBoxToggled, this);
 	clearButton->Bind(wxEVT_BUTTON, &MainFrame::OnClearButtonClicked, this);
 	this->Bind(wxEVT_CLOSE_WINDOW, &MainFrame::OnWindowClosed, this);
 	changeColorButton->Bind(wxEVT_BUTTON, &MainFrame::OnChangeColorButtonClicked, this);
@@ -149,7 +150,7 @@ void MainFrame::OnWindowClosed(wxCloseEvent& evt)
 
 void MainFrame::OnInfoButtonClicked(wxCommandEvent& evt)
 {
-	wxMessageBox("Dies ist eine To-Do-Liste, die mit wxWidgets erstellt wurde.", "Info", wxOK | wxICON_INFORMATION);
+	wxMessageBox(L"\n\nTippe was ein + 'Enter' und du Fügst was Hinzu.\n\n Wähle eine Task aus und drück 'UP' or 'DOWN' um die Task zu verschieben.\n\n Wähle eine Task aus und drücke 'F2' oder 'R' um die Beschreibung zu ändern.\n\n Wähle eine Task aus und drücke 'ENTF' um eine Task zu löschen.", "Info", wxOK | wxICON_INFORMATION);
 }
 
 void MainFrame::OnChangeColorButtonClicked(wxCommandEvent& evt)
@@ -189,6 +190,27 @@ void MainFrame::OnChangeColorButtonClicked(wxCommandEvent& evt)
 	colorMode = !colorMode; // Wechselt den Modus
 
 	panel->Refresh(); // Aktualisieren das Panel, um die neuen Farben anzuzeigen
+}
+
+void MainFrame::OnCheckListBoxToggled(wxCommandEvent& evt)
+{
+	int index = evt.GetInt(); // Index des umgeschalteten Items
+
+	// Überprüfen, ob das Item markiert wurde und nicht einfach unmarkiert wurde
+	if (checklistBox->IsChecked(index))
+	{
+		// Löschen des markierten Items
+		checklistBox->Delete(index);
+	}
+}
+
+void MainFrame::DeleteTask(int index)
+{
+	// Sicherstellen, dass der Index gültig ist
+	if (index >= 0 && index < checklistBox->GetCount())
+	{
+		checklistBox->Delete(index);
+	}
 }
 
 // Task hinzufügen
@@ -252,5 +274,16 @@ void MainFrame::RenameTask(int index)
 	if (dialog.ShowModal() == wxID_OK)
 	{
 		checklistBox->SetString(index, dialog.GetValue());
+	}
+}
+
+void MainFrame::DeleteTaskByTaskDone(bool done)
+{
+	for (int i = checklistBox->GetCount() - 1; i >= 0; i--)
+	{
+		if (checklistBox->IsChecked(i) == done)
+		{
+			checklistBox->Delete(i);
+		}
 	}
 }

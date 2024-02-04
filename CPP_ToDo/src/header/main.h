@@ -18,14 +18,16 @@ private:
 	void OnClearButtonClicked(wxCommandEvent& evt);
 	void OnWindowClosed(wxCloseEvent& evt);
 	void OnInfoButtonClicked(wxCommandEvent& evt);
-	
 	void OnChangeColorButtonClicked(wxCommandEvent& evt);
+	void OnCheckListBoxToggled(wxCommandEvent& evt);
+	void DeleteTask(int index);
 
 	void AddTaskFromInput();
 	void DeleteSelectedTasks();
 	void MoveSelectedTasks(int offset);
 	void SwapTasks(int i, int j);
 	void RenameTask(int index);
+	void DeleteTaskByTaskDone(bool done);
 
 	wxPanel* panel;
 	wxStaticText* headlineText;
