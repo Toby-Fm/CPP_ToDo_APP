@@ -17,6 +17,7 @@ private:
 	void OnListKeyDown(wxKeyEvent& evt);
 	void OnClearButtonClicked(wxCommandEvent& evt);
 	void OnWindowClosed(wxCloseEvent& evt);
+	void OnInfoButtonClicked(wxCommandEvent& evt);
 	
 	void OnChangeColorButtonClicked(wxCommandEvent& evt);
 
@@ -33,5 +34,6 @@ private:
 	wxCheckListBox* checklistBox;
 	wxButton* clearButton;
 	wxButton* changeColorButton;
+	wxButton* infoButton;
 
 };

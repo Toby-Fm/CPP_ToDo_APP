@@ -25,20 +25,27 @@ void MainFrame::CreateControls()
 	checklistBox = new wxCheckListBox(panel, wxID_ANY);
 	clearButton = new wxButton(panel, wxID_ANY, "Clear");
 	changeColorButton = new wxButton(panel, wxID_ANY, "Change Color");
+	infoButton = new wxButton(panel, wxID_ANY, "Info");
 
 	//Layout mit Sizern
 	wxBoxSizer* vSizer = new wxBoxSizer(wxVERTICAL);
 	wxBoxSizer* hSizer = new wxBoxSizer(wxHORIZONTAL);
+	wxBoxSizer* hSizer2 = new wxBoxSizer(wxHORIZONTAL);
 
-	hSizer->Add(inputField, 5, wxEXPAND | wxLEFT | wxRIGHT, 5); // 5 Teile der verfügbaren Größe
-	hSizer->Add(addButton, 1, wxEXPAND | wxRIGHT | wxRIGHT, 5); // 1 Teil der verfügbaren Größe
+	hSizer->Add(inputField, 5, wxEXPAND | wxRIGHT | wxBOTTOM, 5); // 5 Teile der verfügbaren Größe
+	hSizer->Add(addButton, 1, wxEXPAND | wxLEFT | wxBOTTOM, 5); // 1 Teil der verfügbaren Größe
 	
 	vSizer->Add(headlineText, 0, wxALIGN_CENTER | wxTOP | wxBOTTOM, 10);
 	vSizer->Add(hSizer, 0, wxEXPAND | wxLEFT | wxRIGHT | wxBOTTOM, 10);
-	vSizer->Add(checklistBox, 1, wxEXPAND | wxLEFT | wxRIGHT | wxBOTTOM, 10); // 1 Teil der verfügbaren Größe, expandiert
-	vSizer->Add(clearButton, 0, wxALIGN_LEFT | wxLEFT | wxBOTTOM, 10);
-	vSizer->Add(changeColorButton, 0, wxALIGN_LEFT | wxLEFT | wxBOTTOM, 10);
+	vSizer->Add(checklistBox, 1, wxEXPAND | wxLEFT | wxRIGHT | wxBOTTOM, 10);
+	vSizer->Add(clearButton, 0, wxEXPAND | wxLEFT | wxRIGHT | wxBOTTOM, 10);
+
+	hSizer2->Add(changeColorButton, 1, wxEXPAND | wxLEFT | wxBOTTOM, 10);
+	hSizer2->AddStretchSpacer(1);
+	hSizer2->Add(infoButton, 1, wxEXPAND | wxRIGHT | wxBOTTOM, 10);
 	
+	vSizer->Add(hSizer2, 0, wxEXPAND);
+
 	panel->SetSizer(vSizer);
 	panel->Layout();
 }
@@ -51,6 +58,7 @@ void MainFrame::BindEventHandlers()
 	clearButton->Bind(wxEVT_BUTTON, &MainFrame::OnClearButtonClicked, this);
 	this->Bind(wxEVT_CLOSE_WINDOW, &MainFrame::OnWindowClosed, this);
 	changeColorButton->Bind(wxEVT_BUTTON, &MainFrame::OnChangeColorButtonClicked, this);
+	infoButton->Bind(wxEVT_BUTTON, &MainFrame::OnInfoButtonClicked, this);
 }
 
 void MainFrame::AddSavedTasks()
@@ -139,6 +147,11 @@ void MainFrame::OnWindowClosed(wxCloseEvent& evt)
 	evt.Skip();
 }
 
+void MainFrame::OnInfoButtonClicked(wxCommandEvent& evt)
+{
+	wxMessageBox("Dies ist eine To-Do-Liste, die mit wxWidgets erstellt wurde.", "Info", wxOK | wxICON_INFORMATION);
+}
+
 void MainFrame::OnChangeColorButtonClicked(wxCommandEvent& evt)
 {
 	if (colorMode) { //Heller modus
@@ -152,6 +165,8 @@ void MainFrame::OnChangeColorButtonClicked(wxCommandEvent& evt)
 		checklistBox->SetForegroundColour(wxColour(0, 0, 0));
 		clearButton->SetBackgroundColour(wxColour(255, 255, 255));
 		clearButton->SetForegroundColour(wxColour(0, 0, 0));
+		infoButton->SetBackgroundColour(wxColour(255, 255, 255));
+		infoButton->SetForegroundColour(wxColour(0, 0, 0));
 		changeColorButton->SetBackgroundColour(wxColour(255, 255, 255));
 		changeColorButton->SetForegroundColour(wxColour(0, 0, 0));
 	}
@@ -166,6 +181,8 @@ void MainFrame::OnChangeColorButtonClicked(wxCommandEvent& evt)
 		checklistBox->SetForegroundColour(wxColour(51, 51, 51));
 		clearButton->SetBackgroundColour(wxColour(51, 51, 51));
 		clearButton->SetForegroundColour(wxColour(255, 255, 255));
+		infoButton->SetBackgroundColour(wxColour(51, 51, 51));
+		infoButton->SetForegroundColour(wxColour(255, 255, 255));
 		changeColorButton->SetBackgroundColour(wxColour(51, 51, 51));
 		changeColorButton->SetForegroundColour(wxColour(255, 255, 255));
 	}
@@ -183,7 +200,6 @@ void MainFrame::AddTaskFromInput()
 		checklistBox->Insert(description, checklistBox->GetCount());
 		inputField->Clear();
 	}
-
 	inputField->SetFocus();
 }
 
