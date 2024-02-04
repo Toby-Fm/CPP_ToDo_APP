@@ -5,6 +5,13 @@ class MainFrame : public wxFrame
 {
 public:
 	MainFrame(const wxString& title);
+	std::string InfoText = // Info button text
+		"How To Use:\n\n"
+		"Tippe was ein + 'Enter' und du Fügst was Hinzu.\n\n"
+		"Wähle eine Task aus und drück 'UP' or 'DOWN' um die Task zu verschieben.\n\n"
+		"Wähle eine Task aus und drücke 'F2' oder 'R' um die Beschreibung zu ändern.\n\n"
+		"Wähle eine Task aus und drücke 'ENTF' um eine Task zu löschen.\n\n"
+		"Makiere eine Task als Erledigt und sie wird direkt gelöscht.";
 private:
 	bool colorMode;
 
@@ -37,5 +44,4 @@ private:
 	wxButton* clearButton;
 	wxButton* changeColorButton;
 	wxButton* infoButton;
-
 };
