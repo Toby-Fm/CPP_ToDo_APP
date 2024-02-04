@@ -27,6 +27,7 @@ void MainFrame::CreateControls()
 	inputField = new wxTextCtrl(panel, wxID_ANY, "", wxDefaultPosition, wxDefaultSize, wxTE_PROCESS_ENTER);
 	addButton = new wxButton(panel, wxID_ANY, "Add");
 	checklistBox = new wxCheckListBox(panel, wxID_ANY);
+	checklistBox->SetFont(mainFont);
 	clearButton = new wxButton(panel, wxID_ANY, "Clear");
 	changeColorButton = new wxButton(panel, wxID_ANY, "Change Color");
 	infoButton = new wxButton(panel, wxID_ANY, "Info");
