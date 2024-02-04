@@ -29,7 +29,7 @@ void MainFrame::CreateControls()
 	//Layout mit Sizern
 	wxBoxSizer* vSizer = new wxBoxSizer(wxVERTICAL);
 	wxBoxSizer* hSizer = new wxBoxSizer(wxHORIZONTAL);
-	
+
 	hSizer->Add(inputField, 5, wxEXPAND | wxLEFT | wxRIGHT, 5); // 5 Teile der verfügbaren Größe
 	hSizer->Add(addButton, 1, wxEXPAND | wxRIGHT | wxRIGHT, 5); // 1 Teil der verfügbaren Größe
 	
@@ -78,21 +78,32 @@ void MainFrame::OnListKeyDown(wxKeyEvent& evt)
 {
 	switch (evt.GetKeyCode())
 	{
-	case WXK_DELETE:
-	{
-		DeleteSelectedTasks();
-		break;
-	}
-	case WXK_UP:
-	{
-		MoveSelectedTasks(-1);
-		break;
-	}
-	case WXK_DOWN:
-	{
-		MoveSelectedTasks(1);
-		break;
-	}
+		case WXK_DELETE:
+		{
+			DeleteSelectedTasks();
+			break;
+		}
+		case WXK_UP:
+		{
+			MoveSelectedTasks(-1);
+			break;
+		}
+		case WXK_DOWN:
+		{
+			MoveSelectedTasks(1);
+			break;
+		}
+		case WXK_F2:
+		case 'R':
+		case 'r':
+		{
+			int selectedIndex = checklistBox->GetSelection();
+			if (selectedIndex != wxNOT_FOUND)
+			{
+				RenameTask(selectedIndex);
+			}
+			break;
+		}
 	}
 }
 
@@ -159,11 +170,11 @@ void MainFrame::OnChangeColorButtonClicked(wxCommandEvent& evt)
 		changeColorButton->SetForegroundColour(wxColour(255, 255, 255));
 	}
 	colorMode = !colorMode; // Wechselt den Modus
-	
+
 	panel->Refresh(); // Aktualisieren das Panel, um die neuen Farben anzuzeigen
 }
 
-
+// Task hinzufügen
 void MainFrame::AddTaskFromInput()
 {
 	wxString description = inputField->GetValue();
@@ -176,6 +187,7 @@ void MainFrame::AddTaskFromInput()
 	inputField->SetFocus();
 }
 
+// Task löschen
 void MainFrame::DeleteSelectedTasks()
 {
 	int selectedIndex = checklistBox->GetSelection();
@@ -186,6 +198,7 @@ void MainFrame::DeleteSelectedTasks()
 	checklistBox->Delete(selectedIndex);
 }
 
+// Task verschieben
 void MainFrame::MoveSelectedTasks(int offset)
 {
 	int selectedIndex = checklistBox->GetSelection();
@@ -202,6 +215,7 @@ void MainFrame::MoveSelectedTasks(int offset)
 	}
 }
 
+// Task tauschen
 void MainFrame::SwapTasks(int i, int j)
 {
 	Task taskI{ checklistBox->GetString(i).ToStdString(), checklistBox->IsChecked(i) };
@@ -212,4 +226,15 @@ void MainFrame::SwapTasks(int i, int j)
 
 	checklistBox->SetString(j, taskI.description);
 	checklistBox->Check(j, taskI.done);
+}
+
+// Task umbenennen
+void MainFrame::RenameTask(int index)
+{
+	wxString description = checklistBox->GetString(index);
+	wxTextEntryDialog dialog(this, "Beschreibung:", "Task umbennen", description);
+	if (dialog.ShowModal() == wxID_OK)
+	{
+		checklistBox->SetString(index, dialog.GetValue());
+	}
 }
