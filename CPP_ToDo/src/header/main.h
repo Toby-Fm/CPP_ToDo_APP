@@ -24,6 +24,7 @@ private:
 	void DeleteSelectedTasks();
 	void MoveSelectedTasks(int offset);
 	void SwapTasks(int i, int j);
+	void RenameTask(int index);
 
 	wxPanel* panel;
 	wxStaticText* headlineText;
@@ -31,6 +32,6 @@ private:
 	wxButton* addButton;
 	wxCheckListBox* checklistBox;
 	wxButton* clearButton;
-	
 	wxButton* changeColorButton;
+
 };
