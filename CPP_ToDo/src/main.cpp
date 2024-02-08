@@ -9,6 +9,7 @@ MainFrame::MainFrame(const wxString& title) : wxFrame(nullptr, wxID_ANY, title),
 	CreateControls();
 	BindEventHandlers();
 	AddSavedTasks();
+	AddDoneTask();
 }
 
 // Erstellt und platziert die Steuerelemente im Hauptfenster.
@@ -28,6 +29,7 @@ void MainFrame::CreateControls()
 	addButton = new wxButton(panel, wxID_ANY, "Add");
 	checklistBox = new wxCheckListBox(panel, wxID_ANY);
 	checklistBox->SetFont(mainFont);
+	checklistBoxDone = new wxCheckListBox(panel, wxID_ANY);
 	clearButton = new wxButton(panel, wxID_ANY, "Clear");
 	changeColorButton = new wxButton(panel, wxID_ANY, "Change Color");
 	infoButton = new wxButton(panel, wxID_ANY, "Info");
@@ -44,6 +46,7 @@ void MainFrame::CreateControls()
 	vSizer->Add(headlineText, 0, wxALIGN_CENTER | wxTOP | wxBOTTOM, 10);
 	vSizer->Add(hSizer, 0, wxEXPAND | wxLEFT | wxRIGHT | wxBOTTOM, 10);
 	vSizer->Add(checklistBox, 1, wxEXPAND | wxLEFT | wxRIGHT | wxBOTTOM, 10);
+	vSizer->Add(checklistBoxDone, 1, wxEXPAND | wxLEFT | wxRIGHT | wxBOTTOM, 10);
 	vSizer->Add(clearButton, 0, wxEXPAND | wxLEFT | wxRIGHT | wxBOTTOM, 10);
 
 	hSizer2->Add(changeColorButton, 1, wxEXPAND | wxLEFT | wxBOTTOM, 10);
@@ -79,6 +82,17 @@ void MainFrame::AddSavedTasks()
 		int index = checklistBox->GetCount();
 		checklistBox->Insert(task.description, index);
 		checklistBox->Check(index, task.done);
+	}
+}
+
+void MainFrame::AddDoneTask()
+{
+	std::vector<Task> tasks = LoadDoneTasksFromFile("doneTasks.txt");
+	for (const Task& task : tasks)
+	{
+		int index = checklistBoxDone->GetCount();
+		checklistBoxDone->Insert(task.description, index);
+		checklistBoxDone->Check(index, task.done);
 	}
 }
 
@@ -132,7 +146,7 @@ void MainFrame::OnListKeyDown(wxKeyEvent& evt)
 void MainFrame::OnClearButtonClicked(wxCommandEvent& evt)
 {
 	// Überprüfen, ob die Checkliste leer ist.
-	if (checklistBox->IsEmpty())
+	if (checklistBoxDone->IsEmpty())
 	{
 		return;
 	}
@@ -142,7 +156,7 @@ void MainFrame::OnClearButtonClicked(wxCommandEvent& evt)
 	int result = dialog.ShowModal();
 	if (result == wxID_YES)
 	{
-		checklistBox->Clear();
+		checklistBoxDone->Clear();
 	}
 
 }
@@ -162,8 +176,22 @@ void MainFrame::OnWindowClosed(wxCloseEvent& evt)
 	}
 
 	SaveTasksToFile(tasks, "tasks.txt");
+
+	// Speichern der erledigten Aufgaben in einer Datei.
+	std::vector<Task> doneTasks;
+	for (int i = 0; i < checklistBoxDone->GetCount(); i++)
+	{
+		// Erstellen einer Task-Struktur für jedes Element in der Checkliste.
+		Task task;
+		task.description = checklistBoxDone->GetString(i);
+		task.done = checklistBoxDone->IsChecked(i);
+		doneTasks.push_back(task);
+	}
+	SaveDoneTasksToFile(doneTasks, "doneTasks.txt");
 	evt.Skip();
 }
+
+
 
 // Ereignisbehandler für das Klicken auf die Schaltfläche "Info".
 void MainFrame::OnInfoButtonClicked(wxCommandEvent& evt)
@@ -218,7 +246,13 @@ void MainFrame::OnCheckListBoxToggled(wxCommandEvent& evt)
 	// Überprüfen, ob das Item markiert wurde
 	if (checklistBox->IsChecked(index))
 	{
-		// Löschen des markierten Items
+		// Hinzufügen des markierten Items zur checklistBoxDone
+		wxString taskDescription = checklistBox->GetString(index);
+		int newIndex = checklistBoxDone->GetCount();
+		checklistBoxDone->InsertItems(1, &taskDescription, newIndex);
+		checklistBoxDone->Check(newIndex, true); // Markieren als erledigt
+
+		// Löschen des markierten Items aus der checklistBox
 		checklistBox->Delete(index);
 	}
 }

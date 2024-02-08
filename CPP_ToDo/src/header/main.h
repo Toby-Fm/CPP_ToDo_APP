@@ -18,6 +18,7 @@ private:
 	void CreateControls();
 	void BindEventHandlers();
 	void AddSavedTasks();
+	void AddDoneTask();
 	
 	void OnAddButtonClicked(wxCommandEvent& evt);
 	void OnInputEnter(wxCommandEvent& evt);
@@ -36,11 +37,14 @@ private:
 	void RenameTask(int index);
 	void DeleteTaskByTaskDone(bool done);
 
+
+
 	wxPanel* panel;
 	wxStaticText* headlineText;
 	wxTextCtrl* inputField;
 	wxButton* addButton;
 	wxCheckListBox* checklistBox;
+	wxCheckListBox* checklistBoxDone;
 	wxButton* clearButton;
 	wxButton* changeColorButton;
 	wxButton* infoButton;
