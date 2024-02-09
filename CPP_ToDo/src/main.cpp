@@ -27,8 +27,10 @@ void MainFrame::CreateControls()
 	headlineText = new wxStaticText(panel, wxID_ANY, "To-Do List", wxPoint(0, 22), wxSize(800, -1), wxALIGN_CENTER_HORIZONTAL);
 	inputField = new wxTextCtrl(panel, wxID_ANY, "", wxDefaultPosition, wxDefaultSize, wxTE_PROCESS_ENTER);
 	addButton = new wxButton(panel, wxID_ANY, "Add");
+	newTaskText = new wxStaticText(panel, wxID_ANY, "Neue Aufgaben", wxPoint(0, 22), wxSize(800, -1), wxALIGN_CENTER_HORIZONTAL);
 	checklistBox = new wxCheckListBox(panel, wxID_ANY);
 	checklistBox->SetFont(mainFont);
+	doneTaskText = new wxStaticText(panel, wxID_ANY, "Fertige Aufgaben", wxPoint(0, 22), wxSize(800, -1), wxALIGN_CENTER_HORIZONTAL);
 	checklistBoxDone = new wxCheckListBox(panel, wxID_ANY);
 	clearButton = new wxButton(panel, wxID_ANY, "Clear");
 	changeColorButton = new wxButton(panel, wxID_ANY, "Change Color");
@@ -45,7 +47,9 @@ void MainFrame::CreateControls()
 	
 	vSizer->Add(headlineText, 0, wxALIGN_CENTER | wxTOP | wxBOTTOM, 10);
 	vSizer->Add(hSizer, 0, wxEXPAND | wxLEFT | wxRIGHT | wxBOTTOM, 10);
+	vSizer->Add(newTaskText, 0, wxALIGN_CENTER | wxTOP | wxBOTTOM, 10);
 	vSizer->Add(checklistBox, 1, wxEXPAND | wxLEFT | wxRIGHT | wxBOTTOM, 10);
+	vSizer->Add(doneTaskText, 0, wxALIGN_CENTER | wxTOP | wxBOTTOM, 10);
 	vSizer->Add(checklistBoxDone, 1, wxEXPAND | wxLEFT | wxRIGHT | wxBOTTOM, 10);
 	vSizer->Add(clearButton, 0, wxEXPAND | wxLEFT | wxRIGHT | wxBOTTOM, 10);
 
@@ -152,7 +156,7 @@ void MainFrame::OnClearButtonClicked(wxCommandEvent& evt)
 	}
 
 	// Anzeigen einer Bestätigungsdialogbox.
-	wxMessageDialog dialog(this, "Möchtest du wirklich alle Tasks löschen?", "Löschen", wxYES_NO | wxCANCEL | wxICON_QUESTION);
+	wxMessageDialog dialog(this, "Möchtest du wirklich alle Fertigen Tasks löschen?", "Löschen", wxYES_NO | wxCANCEL | wxICON_QUESTION);
 	int result = dialog.ShowModal();
 	if (result == wxID_YES)
 	{

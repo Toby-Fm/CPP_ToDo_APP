@@ -37,13 +37,13 @@ private:
 	void RenameTask(int index);
 	void DeleteTaskByTaskDone(bool done);
 
-
-
 	wxPanel* panel;
 	wxStaticText* headlineText;
 	wxTextCtrl* inputField;
 	wxButton* addButton;
+	wxStaticText* newTaskText;
 	wxCheckListBox* checklistBox;
+	wxStaticText* doneTaskText;
 	wxCheckListBox* checklistBoxDone;
 	wxButton* clearButton;
 	wxButton* changeColorButton;
